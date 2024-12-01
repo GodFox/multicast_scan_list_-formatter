@@ -1,5 +1,7 @@
 import os
-from ipytv import playlist, channel
+import re
+from ipytv import playlist
+
 
 def parse_ref(ref_file) -> dict:
     ref_channels = {}
@@ -46,9 +48,16 @@ def main():
     # sort
     sorted_channels = []
     for url, chan in channels_url.items():
-        is_hd = 0 if '高清' in chan.name else 1
-        name = chan.attributes['tvg-name'] if 'tvg-name' in chan.attributes and chan.attributes['tvg-name'] != '' else chan.name
-        key = str(is_hd) + '_' + name.replace(' ', '')
+        is_hd = 0 if '高清' in chan.name or '4K' in chan.name.upper() else 1
+        name = chan.attributes['tvg-name'] if 'tvg-name' in chan.attributes and chan.attributes[
+            'tvg-name'] != '' else chan.name
+        if 'CCTV' in chan.name.upper():
+            num = re.findall("\d+", name)[0]
+            if len(num) == 1:
+                name = name.replace(num, '0' + num)
+
+        weight = 0 if 'CCTV' in chan.name.upper() else 1 if '卫视' in chan.name else 2
+        key = str(is_hd) + '_' + str(weight) + '_' + name.replace(' ', '')
         sorted_channels.append({
             'key': key,
             'url': url,
