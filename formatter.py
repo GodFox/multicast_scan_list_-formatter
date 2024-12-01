@@ -1,5 +1,5 @@
 import os
-from ipytv import playlist
+from ipytv import playlist, channel
 
 def parse_ref(ref_file) -> dict:
     ref_channels = {}
@@ -43,15 +43,30 @@ def main():
         ref_channels = parse_ref(ref_file)
         channels_url = match_channel(channels_url, ref_channels)
 
+    # sort
+    sorted_channels = []
+    for url, chan in channels_url.items():
+        is_hd = 0 if '高清' in chan.name else 1
+        name = chan.attributes['tvg-name'] if 'tvg-name' in chan.attributes and chan.attributes['tvg-name'] != '' else chan.name
+        key = str(is_hd) + '_' + name.replace(' ', '')
+        sorted_channels.append({
+            'key': key,
+            'url': url,
+            'chan': chan
+        })
+    sorted_channels.sort(key=lambda x: x['key'])
+
     udproxy_prefix = f"http://192.168.10.1:1024/rtp/"
     path, input_file_name = os.path.split(input_file)
     output_file_name = os.path.splitext(input_file_name)[0]
     output_file = os.path.join(path, output_file_name + '.m3u')
     with open(output_file, 'w') as f:
         f.write('#EXTM3U name="IPTV_bj_unicom"\n')
-        for url, detail in channels_url.items():
+        for item in sorted_channels:
+            url = item['url']
+            detail = item['chan']
             detail.url = udproxy_prefix + url.replace('://', '/')
-            print(f"{url}: {detail.to_m3u_plus_playlist_entry()}")
+            print(f"{url}: {detail}")
             f.write(detail.to_m3u_plus_playlist_entry())
 
 
