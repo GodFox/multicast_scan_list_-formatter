@@ -1,0 +1,9 @@
+[submodule "ref/BeiJing-Unicom-IPTV-List"]
+	path = ref/BeiJing-Unicom-IPTV-List
+	url = https://github.com/islercn/BeiJing-Unicom-IPTV-List.git
+[submodule "ref/Beijing-IPTV"]
+	path = ref/Beijing-IPTV
+	url = https://github.com/qwerttvv/Beijing-IPTV.git
+[submodule "ref/bj-unicom-iptv"]
+	path = ref/bj-unicom-iptv
+	url = https://github.com/wuwentao/bj-unicom-iptv.git
