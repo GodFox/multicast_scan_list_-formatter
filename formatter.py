@@ -19,6 +19,7 @@ def match_channel(channels_url, ref_channels: dict):
             continue
         ip = url.split(':')[0]
         if ip in ref_channels.keys():
+            print(f"Matched {url} to {ref_channels[ip]}")
             channels_url[url] = ref_channels[ip]
 
     return channels_url
@@ -38,7 +39,8 @@ def main():
     ref_files = [
         f"ref/bj-unicom-iptv/bj-unicom-iptv.m3u",
         f"ref/Beijing-IPTV/IPTV-Unicom-Multicast.m3u",
-        f"ref/BeiJing-Unicom-IPTV-List/iptv.m3u"
+        f"ref/BeiJing-Unicom-IPTV-List/iptv.m3u",
+        f"ref/scan_list.m3u"
     ]
 
     for ref_file in ref_files:
@@ -48,6 +50,7 @@ def main():
     # sort
     sorted_channels = []
     for url, chan in channels_url.items():
+        print(f"{url}: {chan}")
         is_hd = 0 if '高清' in chan.name or '4K' in chan.name.upper() else 1
         name = chan.attributes['tvg-name'] if 'tvg-name' in chan.attributes and chan.attributes[
             'tvg-name'] != '' else chan.name
