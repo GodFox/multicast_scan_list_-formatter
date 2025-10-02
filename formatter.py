@@ -37,8 +37,8 @@ def main():
             channels_url[line] = {}
 
     ref_files = [
-        f"ref/Beijing-IPTV/IPTV-Unicom-Multicast.m3u",
         f"ref/scan_list.m3u",
+        f"ref/Beijing-IPTV/IPTV-Unicom-Multicast.m3u",
         f"ref/BeiJing-Unicom-IPTV-List/iptv.m3u",
         f"ref/bj-unicom-iptv/bj-unicom-iptv.m3u",
     ]
